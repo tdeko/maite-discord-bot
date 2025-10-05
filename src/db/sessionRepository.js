@@ -32,7 +32,9 @@ function endSession(userId, guildId, endTime) {
 function getSessions(userId, guildId, since) {
     return db.prepare(`
         SELECT * FROM sessions
-        WHERE user_id = ? AND guild_id = ? AND end >= ?
+        WHERE user_id = ?
+          AND guild_id = ?
+          AND (end IS NULL OR end >= ?)
     `).all(userId, guildId, since);
 }
 
