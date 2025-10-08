@@ -14,7 +14,7 @@ module.exports = async (client) => {
         });
 
         // Récupère toutes les sessions encore ouvertes
-        const activeSessions = getActiveSessions().filter(s => s.guild_id === guildId);
+        const activeSessions = getActiveSessions(null, guildId);
 
         for (const s of activeSessions) {
             const member = guild.members.cache.get(s.user_id);

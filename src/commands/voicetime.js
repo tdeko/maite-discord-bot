@@ -31,10 +31,7 @@ module.exports.run = async (message, args) => {
     const member = guild?.members.cache.get(target.id);
 
     if (member && member.voice.channel) {
-        const activeSessions = getActiveSessions();
-        const active = activeSessions.find(
-            s => s.user_id === target.id && s.guild_id === guildId
-        );
+        const active = getActiveSessions(target.id, guildId);
         if (active) {
             totalTime += Math.floor((now - active.start) / 1000);
         }

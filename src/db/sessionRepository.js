@@ -29,18 +29,33 @@ function endSession(userId, guildId, endTime) {
 }
 
 // récupère toutes les sessions depuis une date
+// récupère uniquement les sessions terminées depuis une date
 function getSessions(userId, guildId, since) {
     return db.prepare(`
         SELECT * FROM sessions
         WHERE user_id = ?
           AND guild_id = ?
-          AND (end IS NULL OR end >= ?)
+          AND end IS NOT NULL
+          AND end >= ?
+        ORDER BY end ASC
     `).all(userId, guildId, since);
 }
 
 // récupère les sessions encore ouvertes
-function getActiveSessions() {
-    return db.prepare(`SELECT * FROM sessions WHERE end IS NULL`).all();
+function getActiveSessions(userId = null, guildId = null) {
+    let query = `SELECT * FROM sessions WHERE end IS NULL`;
+    const params = [];
+
+    if (userId) {
+        query += ` AND user_id = ?`;
+        params.push(userId);
+    }
+    if (guildId) {
+        query += ` AND guild_id = ?`;
+        params.push(guildId);
+    }
+
+    return db.prepare(query).all(...params);
 }
 
 // met à jour la dernière sauvegarde d'une session
