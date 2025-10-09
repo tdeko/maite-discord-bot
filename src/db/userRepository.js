@@ -19,4 +19,12 @@ function getUser(userId, guildId) {
     return db.prepare(`SELECT * FROM users WHERE id = ? AND guild_id = ?`).get(userId, guildId);
 }
 
-module.exports = { ensureUser, addTime, getUser };
+function updateTotalTime(userId, guildId, newTotal) {
+    db.prepare(`
+        UPDATE users
+        SET total_time = ?
+        WHERE id = ? AND guild_id = ?
+    `).run(newTotal, userId, guildId);
+}
+
+module.exports = { ensureUser, addTime, getUser, updateTotalTime };
