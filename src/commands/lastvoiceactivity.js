@@ -1,4 +1,4 @@
-const { getSessions, getActiveSessions } = require('../db/sessionRepository');
+const { getSessions, getActiveSession } = require('../db/sessionRepository');
 const formatTime = require('../utils/formatTime');
 
 module.exports.run = async (message) => {
@@ -6,7 +6,7 @@ module.exports.run = async (message) => {
     const guildId = message.guild.id;
 
     // 🔹 1. Vérifie d'abord si l'utilisateur a une session active
-    const active = getActiveSessions(user.id, guildId);
+    const active = getActiveSession(user.id, guildId);
     if (active) {
         const duration = Math.floor((Date.now() - active.start) / 1000);
         return message.reply(

@@ -58,6 +58,11 @@ function getActiveSessions(userId = null, guildId = null) {
     return db.prepare(query).all(...params);
 }
 
+// Une seule session active pour un user précis
+function getActiveSession(userId, guildId) {
+    return getActiveSessions(userId, guildId)[0] || null;
+}
+
 // met à jour la dernière sauvegarde d'une session
 function updateLastSave(userId, guildId, timestamp) {
     db.prepare(`
@@ -72,5 +77,6 @@ module.exports = {
     endSession,
     getSessions,
     getActiveSessions,
+    getActiveSession,
     updateLastSave
 };

@@ -1,4 +1,4 @@
-const { getSessions, getActiveSessions } = require('../db/sessionRepository');
+const { getSessions, getActiveSession } = require('../db/sessionRepository');
 const { getUser } = require('../db/userRepository');
 const formatTime = require('../utils/formatTime');
 const { client } = require('../core/client');
@@ -31,7 +31,7 @@ module.exports.run = async (message, args) => {
     const member = guild?.members.cache.get(target.id);
 
     if (member && member.voice.channel) {
-        const active = getActiveSessions(target.id, guildId);
+        const active = getActiveSession(target.id, guildId);
         if (active) {
             totalTime += Math.floor((now - active.start) / 1000);
         }

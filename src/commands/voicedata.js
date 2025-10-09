@@ -1,5 +1,5 @@
 const { getUser } = require('../db/userRepository');
-const { getSessions, getActiveSessions } = require('../db/sessionRepository');
+const { getSessions, getActiveSession } = require('../db/sessionRepository');
 const formatTime = require('../utils/formatTime');
 
 module.exports.run = async (message, args) => {
@@ -15,8 +15,8 @@ module.exports.run = async (message, args) => {
     const sessions = getSessions(target.id, guildId, 0) || [];
 
     // 🔹 Ajoute la session en cours (si elle existe)
-    const active = getActiveSessions(target.id, guildId);
-    if (active) sessions.push(active);
+    const active = getActiveSession(target.id, guildId);
+    if (active) sessions.push(active);    
 
     // 🔹 Début du message
     let reply = `**Données vocales pour <@${target.id}>**\n`;
