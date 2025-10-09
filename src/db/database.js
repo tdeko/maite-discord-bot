@@ -9,11 +9,11 @@ const db = new Database(path.join(dataDir, 'database.db'));
 
 db.prepare(`
 CREATE TABLE IF NOT EXISTS users (
-    id TEXT,
+    user_id TEXT,
     guild_id TEXT,
     username TEXT,
     total_time INTEGER DEFAULT 0,
-    PRIMARY KEY (id, guild_id)
+    PRIMARY KEY (user_id, guild_id)
 )
 `).run();
 
