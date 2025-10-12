@@ -1,4 +1,6 @@
+const logger = require('../utils/logger');
 const db = require('./database');
+const { client } = require('../core/client');
 
 // démarre une nouvelle session
 function startSession(userId, guildId, start) {
@@ -6,6 +8,11 @@ function startSession(userId, guildId, start) {
         INSERT INTO sessions (user_id, guild_id, start, last_save_time)
         VALUES (?, ?, ?, ?)
     `).run(userId, guildId, start, start);
+
+    const guild = client.guilds.cache.get(guildId);
+    const member = guild?.members?.cache?.get(userId);
+    const username = member?.user?.tag || userId;
+    logger.info(`[Session] Started new session for ${username} in guild ${guild?.name || guildId}`);
 }
 
 // clôture une session
@@ -16,6 +23,10 @@ function endSession(userId, guildId, endTime) {
         ORDER BY start DESC LIMIT 1
     `).get(userId, guildId);
 
+    const guild = client.guilds.cache.get(guildId);
+    const member = guild?.members?.cache?.get(userId);
+    const username = member?.user?.tag || userId;
+
     if (session) {
         const duration = Math.floor((endTime - session.start) / 1000);
         db.prepare(`
@@ -23,8 +34,13 @@ function endSession(userId, guildId, endTime) {
             SET end = ?, duration = ?
             WHERE id = ?
         `).run(endTime, duration, session.id);
+
+        logger.info(`[Session] Ended session for ${username} — duration: ${duration}s in guild ${guild?.name || guildId}`);
+
         return duration;
     }
+
+    logger.warn(`[Session] Tried to end session for ${username}, but no active session found in guild ${guild?.name || guildId}`);
     return 0;
 }
 

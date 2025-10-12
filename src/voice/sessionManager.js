@@ -44,15 +44,24 @@ function updateActiveSessions() {
             const duration = endSession(s.user_id, s.guild_id, safeEnd);
             if (duration > 0) {
                 addTime(s.user_id, s.guild_id, duration);
-                console.log(`🕓 Session clôturée proprement pour ${s.user_id}`);
+
+                const guild = client.guilds.cache.get(s.guild_id);
+                const member = guild?.members?.cache?.get(s.user_id);
+                const username = member?.user?.tag || s.user_id;
+                logger.info(`[SessionSync] Closed session for ${username} (${duration}s)`);
+                console.log(`🕓 Session clôturée proprement pour ${username} (${duration}s)`);
             }
         }
     }
 
     // 4️⃣ Crée les sessions manquantes (utilisateurs en vocal sans session DB)
     for (const { guildId, userId } of connectedMap.values()) {
-        console.log(`⚠️ Session manquante détectée pour ${userId}, création...`);
         startSession(userId, guildId, now);
+        
+        const guild = client.guilds.cache.get(guildId);
+        const member = guild?.members?.cache?.get(userId);
+        const username = member?.user?.tag || userId;
+        logger.warn(`[SessionSync] Missing session detected for ${username} in ${guildName}, created new one`);
     }
 }
 
