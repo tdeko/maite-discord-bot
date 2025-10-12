@@ -68,9 +68,15 @@ function updateLastSave(userId, guildId, timestamp) {
     db.prepare(`
         UPDATE sessions
         SET last_save_time = ?
-        WHERE user_id = ? AND guild_id = ? AND end IS NULL
+        WHERE id = (
+            SELECT id FROM sessions
+            WHERE user_id = ? AND guild_id = ? AND end IS NULL
+            ORDER BY start DESC
+            LIMIT 1
+        )
     `).run(timestamp, userId, guildId);
 }
+
 
 module.exports = {
     startSession,
