@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const {
     getActiveSessions,
     endSession,
@@ -61,7 +62,7 @@ function updateActiveSessions() {
         const guild = client.guilds.cache.get(guildId);
         const member = guild?.members?.cache?.get(userId);
         const username = member?.user?.tag || userId;
-        logger.warn(`[SessionSync] Missing session detected for ${username} in ${guildName}, created new one`);
+        logger.warn(`[SessionSync] Missing session detected for ${username} in ${guild.name}, created new one`);
     }
 }
 
