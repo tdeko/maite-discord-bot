@@ -9,7 +9,7 @@ const formatTime = require('../utils/formatTime');
 async function handleStartupRecalculation(guild) {
     
     logger.info(`[${guild.name}] Starting voice time recalculation...`);
-    console.log(`🔁 Recalcul des temps vocaux pour ${guild.name}...`);
+    // console.log(`🔁 Recalcul des temps vocaux pour ${guild.name}...`);
 
     for (const [id, member] of guild.members.cache) {
         if (member.user.bot) continue;
@@ -26,13 +26,13 @@ async function handleStartupRecalculation(guild) {
             let fromTime = formatTime(old);
             let toTime = formatTime(recalculated);
 
-            console.log(`🔄 ${member.user.tag}: corrigé ${fromTime} → ${toTime}`);
             logger.warn(`${member.user.tag}: corrected ${fromTime} → ${toTime}`);
+            // console.log(`🔄 ${member.user.tag}: corrigé ${fromTime} → ${toTime}`);
         }
     }
 
     logger.info(`[${guild.name}] Recalculation complete`);
-    console.log(`✅ Recalcul terminé pour ${guild.name}`);
+    // console.log(`✅ Recalcul terminé pour ${guild.name}`);
 }
 
 /**
@@ -57,13 +57,13 @@ async function handleActiveSessions(guild) {
             if (duration > 0) {
                 addTime(s.user_id, guildId, duration);
                 logger.warn(`Closed stale session for ${member?.user?.tag || s.user_id} (ended at last_save_time)`);
-                console.log(`🕓 Session clôturée à last_save_time pour ${member?.user?.tag || s.user_id}`);
+                // console.log(`🕓 Session clôturée à last_save_time pour ${member?.user?.tag || s.user_id}`);
             }
         } else {
             endSession(s.user_id, guildId, safeEnd);
             startSession(s.user_id, guildId, now);
             logger.warn(`Restarted session cleanly for ${member?.user?.tag || s.user_id}`);
-            console.log(`🎧 Session redémarrée proprement pour ${member?.user?.tag || s.user_id}`);
+            // console.log(`🎧 Session redémarrée proprement pour ${member?.user?.tag || s.user_id}`);
         }
     }
 

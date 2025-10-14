@@ -35,7 +35,7 @@ function endSession(userId, guildId, endTime) {
             WHERE id = ?
         `).run(endTime, duration, session.id);
 
-        logger.info(`[Session] Ended session for ${username} — duration: ${duration}s in guild ${guild?.name || guildId}`);
+        logger.info(`[Session] Ended session for ${username} — duration: ${formatTime(duration)} in guild ${guild?.name || guildId}`);
 
         return duration;
     }

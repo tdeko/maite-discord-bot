@@ -1,3 +1,5 @@
+const logger = require('../utils/logger');
+
 module.exports.run = async (message, args) => {
     try {
         // 🔹 Lecture des arguments
@@ -64,11 +66,11 @@ module.exports.run = async (message, args) => {
 
         // 🔹 Lecture de la réponse JSON
         const data = await response.json();
-        // console.log("🧠 [AI DEBUG] Raw response:", JSON.stringify(data, null, 2));
+        // logger.info("🧠 [AI DEBUG] Raw response:", JSON.stringify(data, null, 2));
 
         // 🔹 Vérifie le statut HTTP
         if (!response.ok) {
-            console.error("🧠 [AI ERROR] HTTP", response.status, response.statusText);
+            logger.error("[AI ERROR] HTTP", response.status, response.statusText);
             return message.reply(`Erreur HTTP ${response.status} : ${data?.error?.message || 'aucune info'}`);
         }
 
@@ -76,18 +78,15 @@ module.exports.run = async (message, args) => {
         const reply = data?.choices?.[0]?.message?.content?.trim();
         if (!reply) {
             const err = data?.error?.message || JSON.stringify(data);
-            console.error("🧠 [AI ERROR] Pas de contenu :", err);
+            logger.error("[AI ERROR] Pas de contenu :", err);
             return message.reply("Oh la la, Bonux n’a rien répondu 😳");
         }
 
         // 🔹 Envoie la réponse finale
         await message.channel.send(reply);
 
-        // 🔹 Debug facultatif
-        console.log(`🧠 Contexte envoyé : ${context.length} messages (${totalChars} caractères)`);
-
     } catch (e) {
-        console.error("🧠 [AI ERROR - exception]:", e);
+        logger.error("[AI ERROR - exception]: " + e);
         message.reply("Oups ma bécasse, j’ai renversé la lessive !");
     }
 };

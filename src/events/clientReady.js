@@ -7,7 +7,7 @@ const { startSayTool } = require('../tools/sayTool');
 module.exports = async (client) => {
 
     logger.info(`Bot connected as ${client.user.tag}`)
-    console.log(`✅ Connecté en tant que ${client.user.tag}`);
+    // console.log(`✅ Connecté en tant que ${client.user.tag}`);
 
     for (const [guildId, guild] of client.guilds.cache) {
         await guild.members.fetch();
@@ -32,16 +32,16 @@ module.exports = async (client) => {
             try {
                 updateActiveSessions();
             } catch (err) {
-                logger.error('Error during session update :', err);
-                console.error('[SessionManager] Erreur lors de la mise à jour :', err);
+                logger.error('[SessionManager] Error during session update :', err);
+                // console.error('[SessionManager] Erreur lors de la mise à jour :', err);
             }
         }, 30 * 1000);
         logger.info('Voice activity watcher started (every 30s).');
-        console.log('🧩 Surveillance vocale activée toutes les 30 secondes');
+        // console.log('🧩 Surveillance vocale activée toutes les 30 secondes');
     }
 
     if (process.stdout.isTTY) {
-        console.log('\n🧰 Mode terminal actif — tu peux envoyer des messages manuellement.');
+        // console.log('\n🧰 Mode terminal actif — tu peux envoyer des messages manuellement.');
         startSayTool(client);
     }
 

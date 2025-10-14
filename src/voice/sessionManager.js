@@ -6,6 +6,7 @@ const {
     startSession
 } = require('../db/sessionRepository');
 const { addTime } = require('../db/userRepository');
+const formatTime = require('../utils/formatTime');
 const { client } = require('../core/client');
 
 /**
@@ -49,8 +50,8 @@ function updateActiveSessions() {
                 const guild = client.guilds.cache.get(s.guild_id);
                 const member = guild?.members?.cache?.get(s.user_id);
                 const username = member?.user?.tag || s.user_id;
-                logger.info(`[SessionSync] Closed session for ${username} (${duration}s)`);
-                console.log(`🕓 Session clôturée proprement pour ${username} (${duration}s)`);
+                logger.info(`[SessionSync] Closed session for ${username} (${formatTime(duration)})`);
+                // console.log(`🕓 Session clôturée proprement pour ${username} (${duration}s)`);
             }
         }
     }
@@ -62,7 +63,7 @@ function updateActiveSessions() {
         const guild = client.guilds.cache.get(guildId);
         const member = guild?.members?.cache?.get(userId);
         const username = member?.user?.tag || userId;
-        logger.warn(`[SessionSync] Missing session detected for ${username} in ${guild.name}, created new one`);
+        logger.warn(`[SessionSync] Missing session detected for ${username} in ${guild?.name || guildId}, created new one`);
     }
 }
 

@@ -4,7 +4,7 @@ const path = require('path');
 
 function loadEvents(client) {
     
-    logger.info("Loading events");
+    logger.info("Loading events...");
 
     const eventsDir = path.join(__dirname, '../events');
     const eventFiles = fs.readdirSync(eventsDir).filter(f => f.endsWith('.js'));
@@ -13,7 +13,7 @@ function loadEvents(client) {
         const eventName = file.split('.')[0];
         client.on(eventName, event.bind(null, client));
         logger.info(`Event loaded : ${eventName}`);
-        console.log(`✅ Événement chargé : ${eventName}`);
+        // console.log(`✅ Événement chargé : ${eventName}`);
     }
 }
 
