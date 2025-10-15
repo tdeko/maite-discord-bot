@@ -1,6 +1,7 @@
 const logger = require('../utils/logger');
 const db = require('./database');
 const { client } = require('../core/client');
+const formatTime = require('../utils/formatTime');
 
 // démarre une nouvelle session
 function startSession(userId, guildId, start) {
